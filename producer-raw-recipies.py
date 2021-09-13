@@ -4,9 +4,9 @@ from random import randint
 import random
 from faker import Faker
 import json
+import pickle
 
 import requests
-from bs4 import BeautifulSoup
 from kafka import KafkaProducer
 
 
@@ -40,18 +40,19 @@ def input_data(x):
              "Eicher Motor Turbo", "Gati Transport"]
     state_list = ["UP", "BR",
              "DL", "KA","UK"]
-    fake = Faker()
+   
+    fake = Faker(['en_IN'])
     for i in range(0, x): 
         driver= Driver() 
         driver.id= randint(1, 100) 
         driver.driverName= fake.name() 
         driver.driverTempreture= str(randint(20,60))+'F'
         driver.driverBloodPressure= str(randint(0,200))+'/'+ str(randint(60,90))+'mmHg'
-        driver.address= fake.address() 
+        driver.address= fake.city() 
         driver.latitude= str(fake.latitude()) 
         driver.longitude= str(fake.longitude()) 
         driver.vechileModel= str(random.choice(vehcle_list))
-        driver.vechileLiecense= str(random.choice(vehcle_list))+'-'+str(randint(10, 99))+'-'+str(randint(1000, 9999)) # UP-60-9999
+        driver.vechileLiecense= str(random.choice(state_list))+'-'+str(randint(10, 99))+'-'+str(randint(1000, 9999)) # UP-60-9999
         driver.vechileTempreture= str(randint(30, 150))+'F' 
         driver.vechileFuelLevel= str(randint(1, 100))+'%'
         driver.vechileTyrePressure= str(randint(50, 130))+'psi'
@@ -59,29 +60,15 @@ def input_data(x):
     return driver_data
 
 
-def fetch_raw(recipe_url):
-    html = None
-    print('Processing..{}'.format(recipe_url))
-    try:
-        r = requests.get(recipe_url, headers=headers)
-        if r.status_code == 200:
-            html = r.text
-    except Exception as ex:
-        print('Exception while accessing raw html')
-        print(str(ex))
-    finally:
-        return html.strip()
-
 
 
 if __name__ == '__main__':
    
 
-    #all_recipes = get_recipes()
     driver_data=input_data(100)
     if len(driver_data) > 0:
         kafka_producer = connect_kafka_producer()
         for data in driver_data:
-            publish_message(data, 'raw_recipes', 'raw',json.dumps(data))
+            publish_message(kafka_producer, 'test', 'raw',json.dumps(data.__dict__))
         if kafka_producer is not None:
             kafka_producer.close()
