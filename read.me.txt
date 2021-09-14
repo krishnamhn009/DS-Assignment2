@@ -1,0 +1,55 @@
+SPA Group 158 Demo  (Krishna M Digvijai and Himanshu Gahlot)
+***************************************************************
+1.Installation
+
+	Download and Install below setup files
+	JRE according to your OS and CPU architecture from http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html
+	ZooKeeper http://zookeeper.apache.org/releases.html
+	Kafka using http://kafka.apache.org/downloads.html
+
+Running a Kafka Server
+Important: Please ensure that your ZooKeeper instance is up and running before starting a Kafka server.
+
+	1. Go to Kafka installation directory: C:\kafka_2.12-2.8.0\
+
+	2. Open a command prompt here by pressing Shift + right click and choose the “Open command window here” option).
+
+	3. Now type .\bin\windows\kafka-server-start.bat .\config\server.properties and press Enter.
+	
+	
+Creating Topics
+	1. Now create a topic with the name topic-vehicle-data and a replication factor of 1, as we have only one Kafka server running. If you have a cluster with more than one Kafka server running, you can increase the replication-factor accordingly, which will increase the data availability and act like a fault-tolerant system.
+
+	2. Open a new command prompt in the location C:\kafka_2.12-2.8.0\bin\windows.
+
+	3. Type the following command and hit Enter:
+		kafka-topics.bat --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic topic-vehicle-data
+		
+
+Creating a Producer and Consumer to Test Server
+	1. Open a new command prompt in the location C:\kafka_2.12-2.8.0\bin\windows
+
+	2. To start a producer type the following command:
+		kafka-console-producer.bat --broker-list localhost:9092 --topic topic-vehicle-data
+	3. Again open a new command prompt in the same location as C:\kafka_2.12-2.8.0\bin\windows
+
+	4. Now start a consumer by typing the following command:
+		kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic topic-vehicle-data	
+
+check for topics 
+
+	kafka-topics.bat --list --zookeeper localhost:2181
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+I was moving on the road arround 7am on 8th sept 2021. Suddenly a biker hit me 
+from behind and phone was dropped on the rad and it damaged.
+front screen glass is broken in left side and camera cover glass is broken.
+ But seems phone is functioning fine	
